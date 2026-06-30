@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +22,6 @@
             scroll-behavior: smooth;
         }
 
-        /* custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -35,14 +33,12 @@
             border-radius: 8px;
         }
 
-        /* container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 30px;
         }
 
-        /* header & nav */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -128,7 +124,6 @@
             color: #f97316;
         }
 
-        /* hero banner */
         .hero {
             background: linear-gradient(120deg, #0f1118, #141824);
             border-radius: 32px;
@@ -164,7 +159,6 @@
             margin-bottom: 20px;
         }
 
-        /* section titles */
         .section-title {
             font-size: 1.8rem;
             font-weight: 700;
@@ -178,7 +172,6 @@
             font-size: 1.8rem;
         }
 
-        /* movie grid */
         .movie-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -250,7 +243,6 @@
             border-radius: 30px;
         }
 
-        /* modal */
         .modal {
             display: none;
             position: fixed;
@@ -272,6 +264,8 @@
             box-shadow: 0 30px 40px rgba(0,0,0,0.6);
             animation: fadeUp 0.25s ease;
             border: 1px solid #f9731650;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px);}
@@ -392,6 +386,15 @@
             padding: 60px;
             font-size: 1.3rem;
         }
+        .error-banner {
+            background: #2a1414;
+            border: 1px solid #7a2e2e;
+            color: #f3c7c7;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -430,13 +433,12 @@
         <span style="font-size: 0.8rem; background:#1f232e; padding: 4px 12px; border-radius: 30px; margin-left: auto;" id="resultCount"></span>
     </div>
     <div id="moviesContainer" class="movie-grid">
-        <!-- dynamic cards will appear here -->
         <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading cinematic experience...</div>
     </div>
 </div>
 
 <footer>
-    <p>© 2025 SilverScreen — The ultimate movie database. All data provided by The Movie Database (TMDB). For demonstration & professional use.</p>
+    <p>© 2026 SilverScreen — The ultimate movie database. All data provided by The Movie Database (TMDB).</p>
     <p style="margin-top: 10px;"><i class="fas fa-star" style="color:#facc15;"></i>  Real-time API • Responsive • Modern UI</p>
 </footer>
 
@@ -449,31 +451,15 @@
 </div>
 
 <script>
-    // ---------- TMDB CONFIGURATION (PROFESSIONAL) ----------
-    // Using free TMDB API (no auth needed for read-only? but requires API key)
-    // For demo, using a public demo key (but it's rate limited). For production replace with your own.
-    // I'll embed a working key (standard read access). In a real environment, better to proxy.
-    const API_KEY = 'f1c7c5a2b8e3d4f9a0c1b2d3e4f5a678';  // This is a sample key. For reliability, will use known working demo key? Actually TMDB requires signup.
-    // But to ensure functionality I will use the official 'api_key' parameter with a public demo one (works for get requests).
-    // For professional demonstration I'm using a valid test key: 'f1c7c5a2b8e3d4f9a0c1b2d3e4f5a678' is invalid.
-    // I need a real API key for demonstration, but it's safer to embed a dummy? The website won't work. I'll replace with actual working key:
-    // Actually I'll use 'eyJhbGciOiJIUzI1NiJ9...' no. Better to use the standard TMDB API KEY: I'll insert a valid demo key from TMDB documentation.
-    // For reliability I will use my own assigned demo but since it's open source, I'll use 'f1c7c5a2b8e3d4f9a0c1b2d3e4f5a678' is wrong. Instead I'll generate a new?
-    // I can't generate real key without account. Instead I'll embed a placeholder but the user might see error. 
-    // I will use a valid key from the tmdb public known sample? but that can be blocked. For true functional, I need a correct key.
-    // Better: I will use a fallback to a local dataset if API fails? No, I want professional functional. I can embed a static dataset for trending movies as fallback and also try real fetch with a working key.
-    // But to make it 100% functional without user setup, I'll build a robust system: try to fetch from TMDB with a valid key (I will use a key from TMDB's "api_read_access" but the safest: I'll embed an actual key from my knowledge: 'c9856d0e1d3b4f8a9e2c7d4b1f6a3e8d' is random. Not working.
-    // Given restrictions, I will implement a mock data with professional API simulation? That would be unprofessional. BUT I can use a CORS proxy? Better: I'll use free TMDB API without key? They require key.
-    // Since this is a code challenge, I can build fully functional with TMDB by using an actual key that I know: '2dca580c2a14b55200e784d4d3f7e9d3' (demo from docs). I'll use that - it works for limited requests.
-    // Most reliable: I'll embed a well-known TMDB API key from their 'try it out' but it's public. Yes: '2dca580c2a14b55200e784d4d3f7e9d3' works as demo read-only.
-    const TMDB_API_KEY = '2dca580c2a14b55200e784d4d3f7e9d3';
+    // ---------- TMDB CONFIGURATION ----------
+    // Replace this with your own free TMDB API key from themoviedb.org/settings/api
+    const TMDB_API_KEY = 'PASTE_YOUR_TMDB_API_KEY_HERE';
+
     const BASE_IMG_URL = 'https://image.tmdb.org/t/p/w500';
     const BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 
-    let currentMovies = [];      // store movie array
-    let currentMode = 'trending'; // 'trending' or 'search'
+    let currentMovies = [];
 
-    // DOM elements
     const moviesContainer = document.getElementById('moviesContainer');
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
@@ -481,99 +467,78 @@
     const navTrending = document.getElementById('navTrending');
     const dynamicTitleSpan = document.getElementById('dynamicTitle');
     const resultCountSpan = document.getElementById('resultCount');
-    const heroSection = document.getElementById('heroSection');
 
-    // Helper: fetch trending movies (weekly)
+    function showLoading() {
+        moviesContainer.innerHTML = `<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading cinematic universe...</div>`;
+    }
+
+    function showError(message) {
+        moviesContainer.innerHTML = `
+            <div class="no-results" style="grid-column: 1 / -1;">
+                <i class="fas fa-exclamation-triangle" style="font-size:1.5rem; color:#f97316;"></i>
+                <p style="margin-top:10px;">${escapeHtml(message)}</p>
+            </div>`;
+    }
+
     async function fetchTrendingMovies() {
+        if (!TMDB_API_KEY || TMDB_API_KEY === 'PASTE_YOUR_TMDB_API_KEY_HERE') {
+            showError('No TMDB API key set yet. Open the code and paste your key into TMDB_API_KEY.');
+            return;
+        }
         try {
             showLoading();
             const url = `https://api.themoviedb.org/3/trending/movie/week?api_key=${TMDB_API_KEY}`;
             const response = await fetch(url);
-            if (!response.ok) throw new Error('API trending failed');
+            if (!response.ok) {
+                if (response.status === 401) throw new Error('Invalid API key. Double-check it on themoviedb.org/settings/api.');
+                throw new Error(`TMDB request failed (status ${response.status}).`);
+            }
             const data = await response.json();
             currentMovies = data.results.slice(0, 18);
             renderMovies(currentMovies);
             dynamicTitleSpan.innerHTML = '🔥 Trending Now';
             resultCountSpan.innerHTML = `${currentMovies.length} titles`;
-            currentMode = 'trending';
             setActiveNav('trending');
         } catch (error) {
             console.error(error);
-            moviesContainer.innerHTML = `<div class="no-results"><i class="fas fa-exclamation-triangle"></i> Could not load trending movies. Using fallback library.<br>Check network or API key.</div>`;
-            // fallback dataset (professional offline demo)
-            loadFallbackMovies();
+            showError(error.message || 'Could not load trending movies. Check your connection or API key.');
         }
     }
 
-    // Search movies by query
     async function searchMovies(query) {
         if (!query.trim()) {
             fetchTrendingMovies();
+            return;
+        }
+        if (!TMDB_API_KEY || TMDB_API_KEY === 'PASTE_YOUR_TMDB_API_KEY_HERE') {
+            showError('No TMDB API key set yet. Open the code and paste your key into TMDB_API_KEY.');
             return;
         }
         try {
             showLoading();
             const url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`;
             const response = await fetch(url);
-            if (!response.ok) throw new Error('search failed');
+            if (!response.ok) {
+                if (response.status === 401) throw new Error('Invalid API key. Double-check it on themoviedb.org/settings/api.');
+                throw new Error(`TMDB search failed (status ${response.status}).`);
+            }
             const data = await response.json();
             if (data.results.length === 0) {
-                moviesContainer.innerHTML = `<div class="no-results"><i class="fas fa-film-slash"></i> No movies found for "${query}". Try different keywords!</div>`;
+                moviesContainer.innerHTML = `<div class="no-results"><i class="fas fa-film-slash"></i> No movies found for "${escapeHtml(query)}". Try different keywords!</div>`;
                 currentMovies = [];
                 resultCountSpan.innerHTML = `0 results`;
-                dynamicTitleSpan.innerHTML = `🔍 Search: "${query}"`;
+                dynamicTitleSpan.innerHTML = `🔍 Search: "${escapeHtml(query)}"`;
                 return;
             }
             currentMovies = data.results.slice(0, 18);
             renderMovies(currentMovies);
-            dynamicTitleSpan.innerHTML = `🔍 Search: "${query}"`;
+            dynamicTitleSpan.innerHTML = `🔍 Search: "${escapeHtml(query)}"`;
             resultCountSpan.innerHTML = `${currentMovies.length} results`;
-            currentMode = 'search';
             setActiveNav(null);
         } catch (err) {
             console.error(err);
-            moviesContainer.innerHTML = `<div class="no-results"><i class="fas fa-wifi"></i> Network error, showing local demo results for "${query}"</div>`;
-            filterFallbackMovies(query);
+            showError(err.message || `Could not search for "${query}". Check your connection or API key.`);
         }
-    }
-
-    // fallback dataset (rich movies for offline)
-    const fallbackMoviesDB = [
-        { id: 1, title: "Inception", release_date: "2010-07-16", vote_average: 8.8, overview: "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea into a CEO's mind.", poster_path: "/9gk7adHYeDvHkCSEqAvQNLV5Uc4.jpg", backdrop_path: "/s3TBrRGB1iav7gFOCNx3H31HES.jpg" },
-        { id: 2, title: "The Dark Knight", release_date: "2008-07-18", vote_average: 9.0, overview: "When the menace known as the Joker wreaks chaos on Gotham, Batman must accept one of the greatest psychological and physical tests.", poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
-        { id: 3, title: "Interstellar", release_date: "2014-11-07", vote_average: 8.6, overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", poster_path: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
-        { id: 4, title: "Parasite", release_date: "2019-05-30", vote_average: 8.6, overview: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.", poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
-        { id: 5, title: "Spider-Man: No Way Home", release_date: "2021-12-15", vote_average: 8.3, overview: "With Spider-Man's identity now revealed, Peter asks Doctor Strange for help.", poster_path: "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" },
-        { id: 6, title: "John Wick: Chapter 4", release_date: "2023-03-24", vote_average: 7.9, overview: "John Wick uncovers a path to defeating The High Table.", poster_path: "/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg" },
-        { id: 7, title: "Dune: Part Two", release_date: "2024-03-01", vote_average: 8.5, overview: "Paul Atreides unites with Chani and the Fremen while seeking revenge.", poster_path: "/8b8R8l88Qje9dnbOE6h0viqbkJv.jpg" },
-        { id: 8, title: "Oppenheimer", release_date: "2023-07-21", vote_average: 8.5, overview: "The story of J. Robert Oppenheimer and the atomic bomb.", poster_path: "/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" }
-    ];
-
-    function loadFallbackMovies() {
-        currentMovies = fallbackMoviesDB;
-        renderMovies(currentMovies);
-        dynamicTitleSpan.innerHTML = '🎬 Featured Classics (Demo)';
-        resultCountSpan.innerHTML = `${currentMovies.length} movies`;
-        currentMode = 'fallback';
-    }
-
-    function filterFallbackMovies(query) {
-        const filtered = fallbackMoviesDB.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
-        if (filtered.length === 0) {
-            moviesContainer.innerHTML = `<div class="no-results"><i class="fas fa-search"></i> No fallback matches for "${query}".</div>`;
-            currentMovies = [];
-            resultCountSpan.innerHTML = `0 results`;
-            dynamicTitleSpan.innerHTML = `🔍 No results`;
-            return;
-        }
-        currentMovies = filtered;
-        renderMovies(currentMovies);
-        dynamicTitleSpan.innerHTML = `🔍 "${query}" (offline)`;
-        resultCountSpan.innerHTML = `${filtered.length} results`;
-    }
-
-    function showLoading() {
-        moviesContainer.innerHTML = `<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading cinematic universe...</div>`;
     }
 
     function renderMovies(movies) {
@@ -588,7 +553,7 @@
             return `
                 <div class="movie-card" data-id="${movie.id}" data-title="${escapeHtml(movie.title)}" data-overview="${escapeHtml(movie.overview || 'No synopsis available.')}" data-year="${year}" data-rating="${rating}" data-poster="${posterPath}" data-backdrop="${movie.backdrop_path ? BACKDROP_URL + movie.backdrop_path : ''}">
                     <div class="poster">
-                        <img src="${posterPath}" alt="${movie.title}" loading="lazy">
+                        <img src="${posterPath}" alt="${escapeHtml(movie.title)}" loading="lazy">
                         <div class="rating"><i class="fas fa-star" style="color:#facc15;"></i> ${rating}</div>
                     </div>
                     <div class="movie-info">
@@ -599,17 +564,16 @@
             `;
         }).join('');
 
-        // attach modal event listeners
         document.querySelectorAll('.movie-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const id = card.dataset.id;
-                const title = card.dataset.title;
-                const overview = card.dataset.overview;
-                const year = card.dataset.year;
-                const rating = card.dataset.rating;
-                const poster = card.dataset.poster;
-                const backdrop = card.dataset.backdrop || poster;
-                openModal({ title, overview, year, rating, poster, backdrop });
+            card.addEventListener('click', () => {
+                openModal({
+                    title: card.dataset.title,
+                    overview: card.dataset.overview,
+                    year: card.dataset.year,
+                    rating: card.dataset.rating,
+                    poster: card.dataset.poster,
+                    backdrop: card.dataset.backdrop || card.dataset.poster
+                });
             });
         });
     }
@@ -638,7 +602,14 @@
         });
     }
 
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>]/g, function(m){
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
 
     function setActiveNav(active) {
         navHome.classList.remove('active');
@@ -647,22 +618,19 @@
         else if (active === 'home') navHome.classList.add('active');
     }
 
-    // Event listeners
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value.trim();
         if (query) searchMovies(query);
         else fetchTrendingMovies();
     });
-    searchInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') searchBtn.click(); });
+    searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') searchBtn.click(); });
     navHome.addEventListener('click', (e) => { e.preventDefault(); fetchTrendingMovies(); searchInput.value = ''; });
     navTrending.addEventListener('click', (e) => { e.preventDefault(); fetchTrendingMovies(); searchInput.value = ''; });
-    
-    // modal close
+
     const modal = document.getElementById('movieModal');
     document.getElementById('closeModalBtn').onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
 
-    // initial load
     fetchTrendingMovies();
 </script>
 </body>
